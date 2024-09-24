@@ -5,8 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Custom Bio Page</title>
   <link rel="stylesheet" href="styles.css" />
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
+  <!-- Background Video -->
+  <video autoplay muted loop id="bg-video">
+    <source src="background-video.mp4" type="video/mp4" />
+    Your browser does not support HTML5 video.
+  </video>
+
+  <!-- Main Container -->
   <div class="container">
     <div class="profile-header">
       <img class="profile-image" src="your-avatar.jpg" alt="Your Name" />
@@ -14,12 +22,20 @@
       <p class="profile-bio">A short bio about yourself goes here. Keep it simple.</p>
     </div>
 
+    <!-- Discord Status Section -->
+    <div class="discord-status">
+      <h2>Discord Status</h2>
+      <p id="discord-status">Loading...</p>
+    </div>
+
+    <!-- Social Links -->
     <div class="social-links">
       <a href="https://twitter.com/yourhandle" target="_blank">Twitter</a>
       <a href="https://github.com/yourprofile" target="_blank">GitHub</a>
       <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
     </div>
 
+    <!-- About Section -->
     <div class="about-section">
       <h2>About Me</h2>
       <p>
@@ -27,6 +43,34 @@
         to highlight.
       </p>
     </div>
+
+    <!-- Custom Badges Section -->
+    <div class="badges-section">
+      <h2>My Badges</h2>
+      <span class="badge">HTML</span>
+      <span class="badge">CSS</span>
+      <span class="badge">JavaScript</span>
+      <!-- Add more badges as needed -->
+    </div>
   </div>
+
+  <script>
+    // Fetch Discord Status using Lanyard API
+    const discordUserId = 'YOUR_DISCORD_USER_ID'; // Replace with your Discord user ID
+    const discordStatusEl = document.getElementById('discord-status');
+
+    axios.get(`https://api.lanyard.rest/v1/users/${discordUserId}`)
+      .then(response => {
+        const data = response.data.data;
+        if (data.discord_status) {
+          discordStatusEl.innerText = `Status: ${data.discord_status}`;
+        } else {
+          discordStatusEl.innerText = 'Status: Offline';
+        }
+      })
+      .catch(error => {
+        discordStatusEl.innerText = 'Error fetching Discord status';
+      });
+  </script>
 </body>
 </html>
